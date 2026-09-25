@@ -20,7 +20,8 @@ def generateUserResponse(prompt: str):
                         "content": prompt,
                     }
                 ],
-                model=model
+                model=model,
+                max_completion_tokens=1000,
             )
             return chat_completion.choices[0].message.content
 

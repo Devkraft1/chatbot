@@ -6,21 +6,26 @@ from promptGen import generateprompt
 from userResponse import generateUserResponse
 app = FastAPI()
 
-origins = ["http://localhost:3000"]
+origins = [
+    "https://test.zsp3zamosc.pl/",
+    "https://zsp3zamosc.pl/",
+]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
-
 )
 
 class Query(BaseModel):
     query: str
 @app.post("/query")
-async def root(query: Query):
+def root(query: Query):
     q = query.query[:100]
     context = search(q)
     prompt = generateprompt(q, context)
-    return generateUserResponse(prompt)
+    answer = generateUserResponse(prompt)
+    return {
+        "answer": answer
+    }
